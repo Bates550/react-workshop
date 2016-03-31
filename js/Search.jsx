@@ -1,13 +1,13 @@
 const React = require('react')
 const ShowCard = require('./ShowCard')
-const data = require('../public/data')
+const Header = require('./Header')
 
 class Search extends React.Component {
   constructor (props) {
     super(props)
 
     this.state = {
-      searchTerm: 'this is the default searchTerm'
+      searchTerm: ''
     }
 
     this.handleSearchTermChange = this.handleSearchTermChange.bind(this)
@@ -20,18 +20,13 @@ class Search extends React.Component {
   render () {
     return (
       <div className='container'>
-        <header className='header'>
-          <h1 className='brand'>HugVid</h1>
-          <input
-            type='text'
-            className='search-input'
-            placeholder='Search'
-            value={this.state.searchTerm}
-            onChange={this.handleSearchTermChange}
-          />
-        </header>
+        <Header
+          handleSearchTermChange={this.handleSearchTermChange}
+          showSearch
+          searchTerm={this.state.searchTerm}
+        />
         <div className='shows'>
-          {data.shows
+          {this.props.route.shows
             .filter((show) => (
               `${show.title} ${show.description}`
               .toUpperCase()
@@ -45,6 +40,12 @@ class Search extends React.Component {
       </div>
     )
   }
+}
+
+Search.propTypes = {
+  route: React.PropTypes.shape({
+    shows: React.PropTypes.arrayOf(React.PropTypes.object)
+  })
 }
 
 module.exports = Search

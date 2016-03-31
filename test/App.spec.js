@@ -6,7 +6,7 @@ const Search = require('../js/Search')
 const ShowCard = require('../js/ShowCard')
 const data = require('../public/data')
 const enzyme = require('enzyme')
-const { shallow } = enzyme
+const { shallow, mount } = enzyme
 
 describe('<Search />', () => {
   it('should render the brand', () => {
@@ -17,5 +17,14 @@ describe('<Search />', () => {
   it('should render as many shows as there are data for', () => {
     const wrapper = shallow(<Search />)
     expect(wrapper.find(ShowCard).length).to.equal(data.shows.length)
+  })
+
+  it('should filter correctly given new state', () => {
+    const wrapper = mount(<Search />)
+    const input = wrapper.find('.search-input')
+    input.node.value = 'house'
+    input.simulate('change')
+    expect(wrapper.state('searchTerm')).to.equal('house')
+    expect(wrapper.find(ShowCard).length).to.equal(2)
   })
 })
